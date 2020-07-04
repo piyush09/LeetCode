@@ -6,11 +6,12 @@ Algo: Form inDegreeDictionary and outDegreeDictionary for all the nodes.
       Until the stack is empty, iterate through all the neighbors of the nodes in the stack.
 
       If atlast inDegreeDictionary is empty, then it is possible to finish courses and return the order of the courses.
-
 """
 import collections
+# DFS Implementation in iterative way using stack
+
 class Solution:
-    def findOrder(self, numCourses, prerequisites):
+    def canFinish(self, numCourses, prerequisites):
 
         # 'indegreeDictionary' is the set of all nodes that point to the current node (indegree)
         indegreeDictionary = collections.defaultdict(set)
@@ -45,12 +46,13 @@ class Solution:
 
         # If inDegreeDictionary is empty, then return 'res' as the required result
         if not indegreeDictionary:
-            return res
+            if res:
+                return True
         else:
-            return []
+            return False
 
-numCourses = 4
-prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+numCourses = 2
+prerequisites = [[1,0],[0,1]]
 
 test = Solution()
-print (test.findOrder(numCourses, prerequisites))
+print (test.canFinish(numCourses, prerequisites))
