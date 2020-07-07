@@ -1,49 +1,53 @@
 import collections
-def criticalConnections(n, connections):
-    def makeGraph(connections):
 
-        # default items are created using list() which returns new empty list object
-        graph = collections.defaultdict(list)
+class Solution:
+    def criticalConnections(self, n, connections):
 
-        for item in connections:
-            graph[item[0]].append(item[1])
-            graph[item[1]].append(item[0])
+        def makeGraph(connections):
 
-        return graph
+            # default items are created using list() which returns new empty list object
+            graph = collections.defaultdict(list)
 
-    # Making a graph for the given connections
-    graph = makeGraph(connections)
+            for item in connections:
+                graph[item[0]].append(item[1])
+                graph[item[1]].append(item[0])
 
-    connections = set(map(tuple, map(sorted, connections)))
+            return graph
 
-    # Assigning rank of (-2) to each node
-    rank = [-2] * n
+        # Making a graph for the given connections
+        graph = makeGraph(connections)
 
-    def dfs(node, depth):
+        connections = set(map(tuple, map(sorted, connections)))
 
-        if rank[node] >= 0:  # visiting (0<=rank<n), or visited(rank=n)
-            return rank[node]
+        # Assigning rank of (-2) to each node
+        rank = [-2] * n
 
-        rank[node] = depth
-        min_back_depth = n
+        def dfs(node, depth):
 
-        for neighbour in graph[node]:
-            if (rank[neighbour] == depth - 1):
-                continue
+            if rank[node] >= 0:  # visiting (0<=rank<n), or visited(rank=n)
+                return rank[node]
 
-            back_depth = dfs(neighbour, depth + 1)
-            if back_depth <= depth:
-                connections.discard(tuple(sorted((node, neighbour))))
+            rank[node] = depth
+            min_back_depth = n
+
+            for neighbour in graph[node]:
+                if (rank[neighbour] == depth - 1):
+                    continue
+
+                back_depth = dfs(neighbour, depth + 1)
+                if back_depth <= depth:
+                    connections.discard(tuple(sorted((node, neighbour))))
                 min_back_depth = min(min_back_depth, back_depth)
 
-                rank[node] = n
-        return min_back_depth
+            rank[node] = n
+            return min_back_depth
 
-    # As it is a connected graph, no need to loop over all the nodes
-    dfs(0, 0)
+        # As it is a connected graph, no need to loop over all the nodes
+        dfs(0, 0)
 
-    return list(connections)
+        return list(connections)
 
 n = 4
 connections = [[0,1],[1,2],[2,0],[1,3]]
-print(criticalConnections(n,connections))
+
+print (Solution().criticalConnections(n, connections))
